@@ -217,69 +217,123 @@ The slice answers two questions: is one over fun with no career attached, and do
 
 The playable slice of §0–§2, built for a browser-and-mobile portal release
 (CrazyGames). One self-contained HTML file: no build step, no external
-requests, no asset files. The art is drawn and the audio is synthesised, so
-the whole game is the file. Landscape-first at a logical 1280×720,
-letterboxed; portrait shows a rotate prompt and is dismissible.
+requests, no asset files. The art is drawn and the audio is synthesised.
+Landscape-first at a logical 1280×720, letterboxed; portrait shows a rotate
+prompt and is dismissible.
 
 **What is in.** The twenty-minute game and both meters. Batting: the six-zone
 fan, tap/hold/premeditate, the raised backlift, cap-or-helmet, Swagger with
-all three effects (stance, flourish, degraded bowler accuracy). Bowling: line
-drag, the five-band length sweep, the seam dial, the dedicated bouncer, the
-walk-back, Hostility, and composition scoring on the last two balls. Both
-tiers at Layers 1–2, the length-marker squeeze between them, the Dossier stub
-(your best scoring zone gets a fielder from island senior), the fast-forward
-of the rest of your team's innings, the selector's note, and instant restart.
+all three effects. Bowling: aim, a repertoire, and Hostility. Both tiers at
+Layers 1–2, the length-marker squeeze between them, the Dossier stub, the
+fast-forward of the rest of your team's innings, and instant restart.
 
-**Controls.** One thumb does everything: press anywhere, drag to pick the
-zone, release on the ball. Hold time is intent — tap is control, hold is
-attack, hold from before the bowler lets go is premeditated *and* raises the
-backlift. Keyboard is 1–6, space, M.
+**Controls.** Batting is one thumb: press anywhere, drag to pick the zone,
+release on the ball. Hold time is intent — tap controls, hold attacks,
+holding from before the bowler lets go is premeditated *and* raises the
+backlift. Bowling is one gesture: drag to the spot on the pitch, let go.
 
-### Where this departs from the document
+### The camera is behind the batter
+
+Not side-on. The design document argued for a fixed elevated side-on view and
+was wrong about it: even with the trapezoid, leg and off never separated
+cleanly, the near boundary sat below the screen, and a leg-side shot flew at
+the lens. Behind the stumps solves all three — line and length read directly,
+the off side is screen right, and the ball goes away from you rather than
+past you.
+
+What that costs: anything played behind square leaves the frame almost at
+once. The answer is a **wagon wheel** in the corner — the ground, the field,
+and the track of the ball you just hit. It is where you actually read a cut
+or a glance, and it doubles as the Dossier's readout. Open question 3 is
+answered, and the answer was to change the camera.
+
+Bowling flips to the bowler's end, and the z axis mirrors with it so the off
+side stays the off side.
+
+### Runs come from a clock, not a distance
+
+The first version scored a struck ball from how far it travelled, which gave
+one run to balls that had beaten the field completely. Runs are now timed:
+who can be first to the ball given they only start moving on contact, how
+long that takes, the gather, and the throw back — against how long the
+batters need per run. A fielder cannot cut off a ball travelling at him at
+speed the way he walks in on a gentle one, so the intercept radius shrinks
+with ball speed. Beating the ring is what earns two or three, and the ring is
+what stops them.
+
+Tier difficulty rides on how fast a side covers the ground (5.8 m/s at club,
+7.1 at island) rather than on where the rope is — a shot's carry now clears
+any rope with room to spare, so the boundary rate is a smooth curve instead
+of a cliff edge at the exact distance a middled shot happens to travel.
+
+### Bowling is one gesture, and bowlers are different people
+
+The two timed taps are gone — they were the thing that made bowling feel like
+work. You point at the spot on the pitch and let go. There is nothing to
+execute, so the skill is entirely tactical: where to put it, which ball to
+bowl, and reading what the batter does about it. Missing your bowler's
+natural length is what costs accuracy, and a loose ball is punished.
+
+Six types, each with three deliveries:
+
+| | | |
+|---|---|---|
+| **Fast** | heavy, bouncer, yorker | pace, and the least time to read anything |
+| **Swing** | outswinger, inswinger, slower ball | drifts in the air, before it pitches |
+| **Seam** | seam up, cross seam, cutter | moves off the pitch, not through the air |
+| **Medium pace** | stock, slower ball, cutter | the honest county trundler |
+| **Finger spin** | off break, arm ball, top spinner | turns in to a right-hander, extra bounce |
+| **Wrist spin** | leg break, googly, slider | turns away, then does not |
+
+Swing is a lateral acceleration in flight; seam and turn are a kick off the
+bounce. The release is aimed so the ball still lands on its mark despite the
+swing — the path deceives, the pitch mark stays honest. A new bowler comes on
+every over when you bat, so the innings keeps changing shape.
+
+### Measured balance (400-ball samples)
+
+Batting, balls per boundary:
+
+| Timing spread | Club | Island |
+|---|---|---|
+| 100 ms (settled) | 2.2 | 2.8 |
+| 140 ms (new player) | 3.2 | 4.7 |
+
+Dismissals run 3–7% of balls faced. Twos and threes are 10–20% of scoring
+shots, which is the point of the clock model. The club tier is generous
+against the document's target on purpose — the document asks the bottom of
+the ladder to be, and the ladder is what takes it away.
+
+Bowling, per 24 balls, at no Hostility and at full:
+
+| | econ | wickets | econ (max Hostility) | wickets |
+|---|---|---|---|---|
+| Fast | 6.3 | 2.6 | 3.7 | 2.2 |
+| Swing | 6.3 | 1.1 | 4.3 | 2.2 |
+| Seam | 7.4 | 1.9 | 4.5 | 2.3 |
+| Medium | 6.9 | 1.3 | 4.6 | 1.5 |
+| Finger spin | 6.6 | 1.0 | 5.0 | 1.1 |
+| Wrist spin | 6.5 | 1.8 | 4.3 | 1.8 |
+
+Hostility cuts economy 30–40% across every type — it strangles rather than
+takes wickets, which is the intended reading. Spraying it costs about two an
+over (7.4 accurate against 9.5 wild).
+
+### Where this still departs from the document
 
 - **The flourish has no dedicated modifier button.** It fires on a full meter
-  plus a premeditated release, because a separate modifier costs a second
-  thumb on a phone. The risk/reward is unchanged: mistime it and the cone
-  roughly doubles.
-- **The cap costs something at club level.** The document puts the injury
-  outcome at representative level and up, which would make the cap strictly
-  correct in a two-tier slice. Here it narrows the timing window on short
-  balls by 20% instead. The injury curve replaces this when the ladder
-  extends.
-- **Ground size is a tier signal.** The rope is 52 m at club and 60 m at
-  island. This was needed to hit the boundary-frequency target without making
-  middled shots implausibly long, and it doubles as tier feel.
-- **The camera compromises on the near side.** Depth is compressed hard
-  toward the camera and gently away from it, because a true side-on elevation
-  puts the near rope below the screen. Leg-side gaps read less precisely than
-  off-side ones. Open question 3 is still open, and this is the build to test
-  it on.
-- **The length track is drawn as a bar under the pitch**, not painted on it.
-  Legibility beat fidelity at this resolution.
-
-### Measured balance (400-ball samples, `docs` targets in brackets)
-
-| Situation | Boundary every | Dismissals |
-|---|---|---|
-| Club, new player (140 ms timing spread) | 4.1 balls [5–6] | 3.3% |
-| Club, competent (60 ms), ideal shot choice | 1.7 balls | 1.0% |
-| Island, competent (60 ms) | 5.3 balls | 1.0% |
-
-Bowling, per 24 balls: an accurate spell concedes 8.2 an over and takes 2.9;
-at full Hostility that becomes **4.2 an over and 3.3 wickets**. A sloppy spell
-concedes 10.3 and takes 1.8. Both levers are legible from the scorecard,
-which is the point of the meter.
-
-The club tier is generous against target on purpose — the document asks the
-bottom of the ladder to be, and the ladder is what takes it away. The
-club-to-island shock (1.7 → 5.3) is the first-over perceptual jump §4 asks
-for.
+  plus a premeditated release, because a second thumb is too expensive on a
+  phone. Mistime it and the cone roughly doubles.
+- **The cap costs something at club level** — a 20% narrower window against
+  the short ball — because the document's injury curve starts above this
+  slice, which would make the cap strictly correct here.
+- **The walk-back is gone.** It was a second pre-ball input on a scheme whose
+  whole problem was having too many.
 
 ### Not built
 
 Everything §3 Layer 3 and up, the full Dossier, career, selection, seasons,
-the Ledger, T20 and multi-day, injuries. The slice exists to answer the two
-questions the MVP section asks, and nothing else.
+the Ledger, T20 and multi-day, injuries.
 
 ### Portal integration
 
